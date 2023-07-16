@@ -1,0 +1,12 @@
+body {
+    background-color: #9b9b92a2;
+}
+
+#gameName {
+    color: #4c6ebb;
+}
+
+#canvas {
+    width: 100%;
+    background-color: black;
+}
