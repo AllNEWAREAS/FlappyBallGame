@@ -1,6 +1,6 @@
 # FlappyBallGame
 
-A flappy-bird like game!!!
+A flappy-bird like game!!! (link: https://allnewareas.github.io/FlappyBallGame/)
 
 ## How to Play
 Tap repeatly to control the ball flying
