@@ -167,7 +167,7 @@ function drawHazard() {
         context.rect(hazardX, canvas.height - hazardHeight, hazardWidth, hazardHeight);
         context.fill();
     
-        hazardX -= (1 + coinCount * 0.07);
+        hazardX -= (1 + coinCount * 0.1);
 
         if (hazardX <= HAZARD_X_END) {
             hazardX = HAZARD_X_START;
@@ -247,22 +247,6 @@ function drawCoin() {
     } else {
         drawGameOver();
     }
-}
-
-function drawGameOver() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    context.beginPath();
-    context.font = "80px Arial";
-    context.fillStyle = "red";
-    context.fillText("Game Over", 95, 200);
-
-    context.beginPath();
-    context.font = "30px Arial";
-    context.fillStyle = "white";
-    context.fillText("Double tap to try again", 148, 250);
-
-    window.requestAnimationFrame(drawGameOver);
 }
 
 function drawRage() {
@@ -360,4 +344,20 @@ function drawExiler() {
     } else {
         drawGameOver();
     }
+}
+
+function drawGameOver() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    context.beginPath();
+    context.font = "80px Arial";
+    context.fillStyle = "red";
+    context.fillText("Game Over", 95, 200);
+
+    context.beginPath();
+    context.font = "30px Arial";
+    context.fillStyle = "white";
+    context.fillText("Double tap to try again", 148, 250);
+
+    window.requestAnimationFrame(drawGameOver);
 }
