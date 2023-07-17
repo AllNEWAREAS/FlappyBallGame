@@ -14,6 +14,10 @@ const COIN_MIN = 600;
 const COUNT_X = 10;
 const COUNT_Y = 30;
 
+var exilerX = 800;
+var exilerY = 150;
+var rageX = 700;
+var rageY = 250;
 var coinX = 650;
 var coinY = 200;
 var hazardWidth = 70;
@@ -25,11 +29,15 @@ var ballR = 15;
 var hazardX = 600;
 var hazardY = 0;
 var coinStatus = false;
+var rageStatus = false;
+var exilerStatus = false;
+var exilerCount = 0;
+var rageCount = 0;
 var coinCount = 0;
 var gameStatus = true;
 var canvas, context;
 var startTime, timePassed;
-var animationHazard, animationCoin;
+var animationHazard, animationCoin, animationRage, animationExiler;
 
 window.onload = function() {
     document.onkeydown = function() {
@@ -40,8 +48,13 @@ window.onload = function() {
             drawBall();
             drawHazard();
             drawCoin();
+            drawRage();
+            drawExiler();
         } else {
-            gameStatus = true;
+            exilerX = 800;
+            exilerY = 150;
+            rageX = 700;
+            rageY = 250;
             coinX = 650;
             coinY = 200;
             hazardWidth = 70;
@@ -53,6 +66,10 @@ window.onload = function() {
             hazardX = 600;
             hazardY = 0;
             coinStatus = false;
+            rageStatus = false;
+            exilerStatus = false;
+            exilerCount = 0;
+            rageCount = 0;
             coinCount = 0;
             gameStatus = true;
         }
@@ -66,8 +83,13 @@ window.onload = function() {
             drawBall();
             drawHazard();
             drawCoin();
+            drawRage();
+            drawExiler();
         } else {
-            gameStatus = true;
+            exilerX = 800;
+            exilerY = 150;
+            rageX = 700;
+            rageY = 250;
             coinX = 650;
             coinY = 200;
             hazardWidth = 70;
@@ -79,6 +101,10 @@ window.onload = function() {
             hazardX = 600;
             hazardY = 0;
             coinStatus = false;
+            rageStatus = false;
+            exilerStatus = false;
+            exilerCount = 0;
+            rageCount = 0;
             coinCount = 0;
             gameStatus = true;
         }
@@ -88,7 +114,7 @@ window.onload = function() {
     context = canvas.getContext("2d");
 
     context.fillStyle = "white";
-    context.arc(ballX, ballY, ballR, 0, 2 * Math.PI);
+    context.arc(ballX, ballY, ballR + (rageCount - exilerCount), 0, 2 * Math.PI);
     context.fill();
 
     context.font = "25px Arial";
@@ -102,7 +128,7 @@ function drawBall() {
 
         context.beginPath();
         context.fillStyle = "white";
-        context.arc(ballX, ballY, ballR, 0, 2 * Math.PI);
+        context.arc(ballX, ballY, ballR + (rageCount - exilerCount), 0, 2 * Math.PI);
         context.fill();
     
         window.requestAnimationFrame(drawBall);
@@ -152,6 +178,18 @@ function drawHazard() {
                     || (coinX + COIN_R >= hazardX && coinX - COIN_R <= hazardX + hazardWidth && coinY + COIN_R >= canvas.height - hazardHeight)) {
                 coinX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
                 coinY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+        }
+
+        while ((rageX + COIN_R >= hazardX && rageX - COIN_R <= hazardX + hazardWidth && rageY - COIN_R <= hazardHeight)
+                    || (rageX + COIN_R >= hazardX && rageX - COIN_R <= hazardX + hazardWidth && rageY + COIN_R >= canvas.height - hazardHeight)) {
+                rageX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                rageY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+        }
+
+        while ((exilerX + COIN_R >= hazardX && exilerX - COIN_R <= hazardX + hazardWidth && exilerY - COIN_R <= hazardHeight)
+                    || (exilerX + COIN_R >= hazardX && exilerX - COIN_R <= hazardX + hazardWidth && exilerY + COIN_R >= canvas.height - hazardHeight)) {
+                exilerX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                exilerY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
         }
     
         animationHazard = window.requestAnimationFrame(drawHazard);
@@ -225,4 +263,101 @@ function drawGameOver() {
     context.fillText("Double tap to try again", 148, 250);
 
     window.requestAnimationFrame(drawGameOver);
+}
+
+function drawRage() {
+    if (gameStatus) {
+        if (animationRage) {
+            window.cancelAnimationFrame(animationRage);
+        }
+    
+        if (!rageStatus) {
+            if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
+                rageCount++;
+                rageStatus = true;
+                context.beginPath();
+                context.fillStyle = "black";
+                context.arc(rageX, rageY, 0, 0, 2 * Math.PI);
+                context.fill();
+            } else {
+                context.beginPath();
+                context.fillStyle = "red";
+                context.arc(rageX, rageY, COIN_R, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else {
+            context.beginPath();
+            context.fillStyle = "black";
+            context.arc(rageX, rageY, 0, 0, 2 * Math.PI);
+            context.fill();
+        }
+    
+        rageX -= (1 + coinCount * 0.07);
+
+        if (rageX <= COIN_X_END || rageStatus) {
+            rageStatus = false;
+            rageX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+            rageY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            while ((rageX + COIN_R >= hazardX && rageX - COIN_R <= hazardX + hazardWidth && rageY - COIN_R <= hazardHeight)
+                    || (rageX + COIN_R >= hazardX && rageX - COIN_R <= hazardX + hazardWidth && rageY + COIN_R >= canvas.height - hazardHeight)) {
+                rageX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                rageY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            }
+        }
+    
+        animationRage = window.requestAnimationFrame(drawRage);
+    
+        context.beginPath();
+        context.font = "25px Arial";
+        context.fillStyle = "red";
+        context.fillText("Size Effect: " + (rageCount - exilerCount), 430, 30);
+    } else {
+        drawGameOver();
+    }
+}
+
+function drawExiler() {
+    if (gameStatus) {
+        if (animationExiler) {
+            window.cancelAnimationFrame(animationExiler);
+        }
+    
+        if (!exilerStatus) {
+            if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
+                exilerCount++;
+                exilerStatus = true;
+                context.beginPath();
+                context.fillStyle = "black";
+                context.arc(exilerX, exilerY, 0, 0, 2 * Math.PI);
+                context.fill();
+            } else {
+                context.beginPath();
+                context.fillStyle = "green";
+                context.arc(exilerX, exilerY, COIN_R, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else {
+            context.beginPath();
+            context.fillStyle = "black";
+            context.arc(exilerX, exilerY, 0, 0, 2 * Math.PI);
+            context.fill();
+        }
+    
+        exilerX -= (1 + coinCount * 0.07);
+
+        if (exilerX <= COIN_X_END || exilerStatus) {
+            exilerStatus = false;
+            exilerX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+            exilerY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            while ((exilerX + COIN_R >= hazardX && exilerX - COIN_R <= hazardX + hazardWidth && exilerY - COIN_R <= hazardHeight)
+                    || (exilerX + COIN_R >= hazardX && exilerX - COIN_R <= hazardX + hazardWidth && exilerY + COIN_R >= canvas.height - hazardHeight)) {
+                exilerX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                exilerY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            }
+        }
+    
+        animationExiler = window.requestAnimationFrame(drawExiler);
+    } else {
+        drawGameOver();
+    }
 }
