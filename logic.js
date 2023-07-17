@@ -276,7 +276,7 @@ function drawRage() {
             context.fill();
         }
     
-        rageX -= (1 + coinCount * 0.07);
+        rageX -= (1 + rageCount * 0.07);
 
         if (rageX <= COIN_X_END || rageStatus) {
             rageStatus = false;
@@ -327,7 +327,7 @@ function drawExiler() {
             context.fill();
         }
     
-        exilerX -= (1 + coinCount * 0.07);
+        exilerX -= (1 + exilerCount * 0.07);
 
         if (exilerX <= COIN_X_END || exilerStatus) {
             exilerStatus = false;
