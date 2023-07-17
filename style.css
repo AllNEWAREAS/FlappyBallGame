@@ -10,3 +10,11 @@ body {
     width: 100%;
     background-color: black;
 }
+
+#instructionName {
+    color: rgb(158, 109, 37);
+}
+
+#tipName {
+    color: rgb(26, 178, 23);
+}
