@@ -167,7 +167,7 @@ function drawHazard() {
         context.rect(hazardX, canvas.height - hazardHeight, hazardWidth, hazardHeight);
         context.fill();
     
-        hazardX -= (1 + coinCount * 0.1);
+        hazardX -= (1 + coinCount * 0.3);
 
         if (hazardX <= HAZARD_X_END) {
             hazardX = HAZARD_X_START;
