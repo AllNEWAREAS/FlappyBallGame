@@ -49,11 +49,11 @@ window.onload = function() {
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
-            drawBall(true);
+            drawBall();
             drawHazard();
-            drawCoin(true);
-            drawRage(true);
-            drawExiler(true);
+            drawCoin();
+            drawRage();
+            drawExiler();
         } else {
             exilerX = 800;
             exilerY = 150;
@@ -84,11 +84,11 @@ window.onload = function() {
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
-            drawBall(false);
+            drawBallMobile();
             drawHazard();
-            drawCoin(false);
-            drawRage(false);
-            drawExiler(false);
+            drawCoinMobile();
+            drawRageMobile();
+            drawExilerMobile();
         } else {
             exilerX = 800;
             exilerY = 150;
@@ -126,7 +126,7 @@ window.onload = function() {
     context.fillText("Tap to play", TEXT_X_START, TEXT_Y_START);
 };
 
-function drawBall(sound) {
+function drawBall() {
     if (gameStatus) {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -153,11 +153,42 @@ function drawBall(sound) {
         if ((ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY - ballR <= hazardHeight)
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
-            if (sound) {
-                var hazard = new Audio("Sounds/hazard.mp3");
-                hazard.currentTime = 0.07;
-                hazard.play();
-            }
+            var hazard = new Audio("Sounds/hazard.mp3");
+            hazard.currentTime = 0.07;
+            hazard.play();
+        }
+    } else {
+        drawGameOver();
+    }
+}
+
+function drawBallMobile() {
+    if (gameStatus) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        context.beginPath();
+        context.fillStyle = "white";
+        context.arc(ballX, ballY, ballR + (rageCount - exilerCount), 0, 2 * Math.PI);
+        context.fill();
+    
+        window.requestAnimationFrame(drawBallMobile);
+    
+        timePassed = (Date.now() - startTime) / MS;
+        startTime = Date.now();
+    
+        if (ballY <= MAX_BALL_Y) {
+            speed += (SPEED_FACTOR * timePassed);
+            ballY += speed * timePassed;
+        } else {
+            context.beginPath();
+            context.font = "25px Arial";
+            context.fillStyle = "red";
+            context.fillText("Tap to play", TEXT_X_START, TEXT_Y_START);
+        }
+    
+        if ((ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY - ballR <= hazardHeight)
+            || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
+            gameStatus = false;
         }
     } else {
         drawGameOver();
@@ -207,7 +238,7 @@ function drawHazard() {
     }
 }
 
-function drawCoin(sound) {
+function drawCoin() {
     if (gameStatus) {
         if (animationCoin) {
             window.cancelAnimationFrame(animationCoin);
@@ -215,11 +246,9 @@ function drawCoin(sound) {
     
         if (!coinStatus) {
             if (coinX <= ballX + ballR && coinX >= ballX - ballR && coinY <= ballY + ballR && coinY >= ballY - ballR) {
-                if (sound) {
-                    var coin = new Audio("Sounds/coin.mp3");
-                    coin.currentTime = 0.1;
-                    coin.play();
-                }
+                var coin = new Audio("Sounds/coin.mp3");
+                coin.currentTime = 0.1;
+                coin.play();
                 coinCount++;
                 coinStatus = true;
                 context.beginPath();
@@ -263,7 +292,58 @@ function drawCoin(sound) {
     }
 }
 
-function drawRage(sound) {
+function drawCoinMobile() {
+    if (gameStatus) {
+        if (animationCoin) {
+            window.cancelAnimationFrame(animationCoin);
+        }
+    
+        if (!coinStatus) {
+            if (coinX <= ballX + ballR && coinX >= ballX - ballR && coinY <= ballY + ballR && coinY >= ballY - ballR) {
+                coinCount++;
+                coinStatus = true;
+                context.beginPath();
+                context.fillStyle = "black";
+                context.arc(coinX, coinY, 0, 0, 2 * Math.PI);
+                context.fill();
+            } else {
+                context.beginPath();
+                context.fillStyle = "yellow";
+                context.arc(coinX, coinY, COIN_R, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else {
+            context.beginPath();
+            context.fillStyle = "black";
+            context.arc(coinX, coinY, 0, 0, 2 * Math.PI);
+            context.fill();
+        }
+    
+        coinX -= (1 + coinCount * 0.07);
+
+        if (coinX <= COIN_X_END || coinStatus) {
+            coinStatus = false;
+            coinX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+            coinY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            while ((coinX + COIN_R >= hazardX && coinX - COIN_R <= hazardX + hazardWidth && coinY - COIN_R <= hazardHeight)
+                    || (coinX + COIN_R >= hazardX && coinX - COIN_R <= hazardX + hazardWidth && coinY + COIN_R >= canvas.height - hazardHeight)) {
+                coinX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                coinY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            }
+        }
+    
+        animationCoin = window.requestAnimationFrame(drawCoinMobile);
+    
+        context.beginPath();
+        context.font = "25px Arial";
+        context.fillStyle = "yellow";
+        context.fillText("Coins: " + coinCount, COUNT_X, COUNT_Y);
+    } else {
+        drawGameOver();
+    }
+}
+
+function drawRage() {
     if (gameStatus) {
         if (animationRage) {
             window.cancelAnimationFrame(animationRage);
@@ -271,11 +351,9 @@ function drawRage(sound) {
     
         if (!rageStatus) {
             if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
-                if (sound) {
-                    var rage = new Audio("Sounds/sizeEffect.mp3");
-                    rage.currentTime = 0.1;
-                    rage.play();
-                }
+                var rage = new Audio("Sounds/sizeEffect.mp3");
+                rage.currentTime = 0.1;
+                rage.play();
                 rageCount++;
                 rageStatus = true;
                 context.beginPath();
@@ -319,7 +397,58 @@ function drawRage(sound) {
     }
 }
 
-function drawExiler(sound) {
+function drawRageMobile() {
+    if (gameStatus) {
+        if (animationRage) {
+            window.cancelAnimationFrame(animationRage);
+        }
+    
+        if (!rageStatus) {
+            if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
+                rageCount++;
+                rageStatus = true;
+                context.beginPath();
+                context.fillStyle = "black";
+                context.arc(rageX, rageY, 0, 0, 2 * Math.PI);
+                context.fill();
+            } else {
+                context.beginPath();
+                context.fillStyle = "red";
+                context.arc(rageX, rageY, COIN_R, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else {
+            context.beginPath();
+            context.fillStyle = "black";
+            context.arc(rageX, rageY, 0, 0, 2 * Math.PI);
+            context.fill();
+        }
+    
+        rageX -= (1 + rageCount * 0.07);
+
+        if (rageX <= COIN_X_END || rageStatus) {
+            rageStatus = false;
+            rageX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+            rageY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            while ((rageX + COIN_R >= hazardX && rageX - COIN_R <= hazardX + hazardWidth && rageY - COIN_R <= hazardHeight)
+                    || (rageX + COIN_R >= hazardX && rageX - COIN_R <= hazardX + hazardWidth && rageY + COIN_R >= canvas.height - hazardHeight)) {
+                rageX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                rageY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            }
+        }
+    
+        animationRage = window.requestAnimationFrame(drawRageMobile);
+    
+        context.beginPath();
+        context.font = "25px Arial";
+        context.fillStyle = "red";
+        context.fillText("Size Effect: " + (rageCount - exilerCount), 430, 30);
+    } else {
+        drawGameOver();
+    }
+}
+
+function drawExiler() {
     if (gameStatus) {
         if (animationExiler) {
             window.cancelAnimationFrame(animationExiler);
@@ -327,11 +456,9 @@ function drawExiler(sound) {
     
         if (!exilerStatus) {
             if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
-                if (sound) {
-                    var exiler = new Audio("Sounds/sizeEffect.mp3");
-                    exiler.currentTime = 0.1;
-                    exiler.play();
-                }
+                var exiler = new Audio("Sounds/sizeEffect.mp3");
+                exiler.currentTime = 0.1;
+                exiler.play();
                 exilerCount++;
                 exilerStatus = true;
                 context.beginPath();
@@ -365,6 +492,52 @@ function drawExiler(sound) {
         }
     
         animationExiler = window.requestAnimationFrame(drawExiler);
+    } else {
+        drawGameOver();
+    }
+}
+
+function drawExilerMobile() {
+    if (gameStatus) {
+        if (animationExiler) {
+            window.cancelAnimationFrame(animationExiler);
+        }
+    
+        if (!exilerStatus) {
+            if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
+                exilerCount++;
+                exilerStatus = true;
+                context.beginPath();
+                context.fillStyle = "black";
+                context.arc(exilerX, exilerY, 0, 0, 2 * Math.PI);
+                context.fill();
+            } else {
+                context.beginPath();
+                context.fillStyle = "green";
+                context.arc(exilerX, exilerY, COIN_R, 0, 2 * Math.PI);
+                context.fill();
+            }
+        } else {
+            context.beginPath();
+            context.fillStyle = "black";
+            context.arc(exilerX, exilerY, 0, 0, 2 * Math.PI);
+            context.fill();
+        }
+    
+        exilerX -= (1 + exilerCount * 0.07);
+
+        if (exilerX <= COIN_X_END || exilerStatus) {
+            exilerStatus = false;
+            exilerX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+            exilerY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            while ((exilerX + COIN_R >= hazardX && exilerX - COIN_R <= hazardX + hazardWidth && exilerY - COIN_R <= hazardHeight)
+                    || (exilerX + COIN_R >= hazardX && exilerX - COIN_R <= hazardX + hazardWidth && exilerY + COIN_R >= canvas.height - hazardHeight)) {
+                exilerX = Math.random() * (COIN_MAX - COIN_MIN) + COIN_MIN;
+                exilerY = Math.random() * ((canvas.height - hazardHeight - ballR) - (hazardHeight + ballR)) + (hazardHeight + ballR);
+            }
+        }
+    
+        animationExiler = window.requestAnimationFrame(drawExilerMobile);
     } else {
         drawGameOver();
     }
