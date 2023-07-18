@@ -158,7 +158,7 @@ function drawBall() {
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
             var hazard = new Audio("Sounds/hazard.mp3");
-            hazard.currentTime = 0.05;
+            hazard.currentTime = 0.1;
             hazard.play();
         }
     } else {
@@ -218,7 +218,7 @@ function drawCoin() {
         if (!coinStatus) {
             if (coinX <= ballX + ballR && coinX >= ballX - ballR && coinY <= ballY + ballR && coinY >= ballY - ballR) {
                 var coin = new Audio("Sounds/coin.mp3");
-                coin.currentTime = 0.05;
+                coin.currentTime = 0.1;
                 coin.play();
                 coinCount++;
                 coinStatus = true;
@@ -272,7 +272,7 @@ function drawRage() {
         if (!rageStatus) {
             if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
                 var rage = new Audio("Sounds/sizeEffect.mp3");
-                rage.currentTime = 0.05;
+                rage.currentTime = 0.1;
                 rage.play();
                 rageCount++;
                 rageStatus = true;
@@ -326,7 +326,7 @@ function drawExiler() {
         if (!exilerStatus) {
             if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
                 var exiler = new Audio("Sounds/sizeEffect.mp3");
-                exiler.currentTime = 0.05;
+                exiler.currentTime = 0.1;
                 exiler.play();
                 exilerCount++;
                 exilerStatus = true;
