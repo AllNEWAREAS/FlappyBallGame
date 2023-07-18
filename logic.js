@@ -39,11 +39,14 @@ var canvas, context;
 var startTime, timePassed;
 var animationHazard, animationCoin, animationRage, animationExiler;
 
+const jump = new Audio("Sounds/jump.mp3");
+
 window.onload = function() {
     document.onkeydown = function() {
-        const jump = new Audio("Sounds/jump.mp3");
+        // const jump = new Audio("Sounds/jump.mp3");
 
         if (gameStatus) {
+            jump.currentTime = 0.15;
             jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
@@ -79,9 +82,10 @@ window.onload = function() {
     }
 
     document.ontouchstart = function() {
-        const jump = new Audio("Sounds/jump.mp3");
+        // const jump = new Audio("Sounds/jump.mp3");
         
         if (gameStatus) {
+            jump.currentTime = 0.15;
             jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
