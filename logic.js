@@ -39,6 +39,8 @@ var canvas, context;
 var startTime, timePassed;
 var animationHazard, animationCoin, animationRage, animationExiler;
 
+var hazard = new Audio("Sounds/hazard.mp3");
+
 window.onload = function() {
     document.onkeydown = function() {
         var jump = new Audio("Sounds/jump.mp3");
@@ -80,11 +82,7 @@ window.onload = function() {
     }
 
     document.ontouchstart = function() {
-        // var jump = new Audio("Sounds/jump.mp3");
-        
         if (gameStatus) {
-            // jump.currentTime = 0.15;
-            // jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
@@ -157,7 +155,7 @@ function drawBall() {
         if ((ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY - ballR <= hazardHeight)
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
-            var hazard = new Audio("Sounds/hazard.mp3");
+            //
             hazard.currentTime = 0.07;
             hazard.play();
         }
