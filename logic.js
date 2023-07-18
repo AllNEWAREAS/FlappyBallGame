@@ -40,6 +40,8 @@ var startTime, timePassed;
 var animationHazard, animationCoin, animationRage, animationExiler;
 
 var hazard = new Audio("Sounds/hazard.mp3");
+var coin = new Audio("Sounds/coin.mp3");
+var sizeEffect = new Audio("Sounds/sizeEffect.mp3");
 
 window.onload = function() {
     document.onkeydown = function() {
@@ -155,7 +157,6 @@ function drawBall() {
         if ((ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY - ballR <= hazardHeight)
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
-            //
             hazard.currentTime = 0.07;
             hazard.play();
         }
@@ -215,7 +216,6 @@ function drawCoin() {
     
         if (!coinStatus) {
             if (coinX <= ballX + ballR && coinX >= ballX - ballR && coinY <= ballY + ballR && coinY >= ballY - ballR) {
-                var coin = new Audio("Sounds/coin.mp3");
                 coin.currentTime = 0.1;
                 coin.play();
                 coinCount++;
@@ -269,9 +269,8 @@ function drawRage() {
     
         if (!rageStatus) {
             if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
-                var rage = new Audio("Sounds/sizeEffect.mp3");
-                rage.currentTime = 0.1;
-                rage.play();
+                sizeEffect.currentTime = 0.1;
+                sizeEffect.play();
                 rageCount++;
                 rageStatus = true;
                 context.beginPath();
@@ -323,9 +322,8 @@ function drawExiler() {
     
         if (!exilerStatus) {
             if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
-                var exiler = new Audio("Sounds/sizeEffect.mp3");
-                exiler.currentTime = 0.1;
-                exiler.play();
+                sizeEffect.currentTime = 0.1;
+                sizeEffect.play();
                 exilerCount++;
                 exilerStatus = true;
                 context.beginPath();
