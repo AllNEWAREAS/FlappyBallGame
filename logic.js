@@ -42,6 +42,8 @@ var animationHazard, animationCoin, animationRage, animationExiler;
 window.onload = function() {
     document.onkeydown = function() {
         if (gameStatus) {
+            var jump = new Audio("Sounds/jump.mp3");
+            jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
@@ -77,6 +79,8 @@ window.onload = function() {
 
     document.ontouchstart = function() {
         if (gameStatus) {
+            var jump = new Audio("Sounds/jump.mp3");
+            jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
@@ -149,6 +153,8 @@ function drawBall() {
         if ((ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY - ballR <= hazardHeight)
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
+            var hazard = new Audio("Sounds/hazard.mp3");
+            hazard.play();
         }
     } else {
         drawGameOver();
@@ -206,6 +212,8 @@ function drawCoin() {
     
         if (!coinStatus) {
             if (coinX <= ballX + ballR && coinX >= ballX - ballR && coinY <= ballY + ballR && coinY >= ballY - ballR) {
+                var coin = new Audio("Sounds/coin.mp3");
+                coin.play();
                 coinCount++;
                 coinStatus = true;
                 context.beginPath();
@@ -257,6 +265,8 @@ function drawRage() {
     
         if (!rageStatus) {
             if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
+                var rage = new Audio("Sounds/sizeEffect.mp3");
+                rage.play();
                 rageCount++;
                 rageStatus = true;
                 context.beginPath();
@@ -308,6 +318,8 @@ function drawExiler() {
     
         if (!exilerStatus) {
             if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
+                var exiler = new Audio("Sounds/sizeEffect.mp3");
+                exiler.play();
                 exilerCount++;
                 exilerStatus = true;
                 context.beginPath();
