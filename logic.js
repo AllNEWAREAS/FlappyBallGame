@@ -80,11 +80,11 @@ window.onload = function() {
     }
 
     document.ontouchstart = function() {
-        var jump = new Audio("Sounds/jump.mp3");
+        // var jump = new Audio("Sounds/jump.mp3");
         
         if (gameStatus) {
-            jump.currentTime = 0.15;
-            jump.play();
+            // jump.currentTime = 0.15;
+            // jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
@@ -158,7 +158,7 @@ function drawBall() {
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
             var hazard = new Audio("Sounds/hazard.mp3");
-            hazard.currentTime = 0.1;
+            hazard.currentTime = 0.07;
             hazard.play();
         }
     } else {
