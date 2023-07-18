@@ -39,10 +39,6 @@ var canvas, context;
 var startTime, timePassed;
 var animationHazard, animationCoin, animationRage, animationExiler;
 
-var hazard = new Audio("Sounds/hazard.mp3");
-var coin = new Audio("Sounds/coin.mp3");
-var sizeEffect = new Audio("Sounds/sizeEffect.mp3");
-
 window.onload = function() {
     document.onkeydown = function() {
         var jump = new Audio("Sounds/jump.mp3");
@@ -53,11 +49,11 @@ window.onload = function() {
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
-            drawBall();
+            drawBall(true);
             drawHazard();
-            drawCoin();
-            drawRage();
-            drawExiler();
+            drawCoin(true);
+            drawRage(true);
+            drawExiler(true);
         } else {
             exilerX = 800;
             exilerY = 150;
@@ -88,11 +84,11 @@ window.onload = function() {
             startTime = Date.now();
             speed = DEFAULT_SPEED;
             ballY -= speed;
-            drawBall();
+            drawBall(false);
             drawHazard();
-            drawCoin();
-            drawRage();
-            drawExiler();
+            drawCoin(false);
+            drawRage(false);
+            drawExiler(false);
         } else {
             exilerX = 800;
             exilerY = 150;
@@ -130,7 +126,7 @@ window.onload = function() {
     context.fillText("Tap to play", TEXT_X_START, TEXT_Y_START);
 };
 
-function drawBall() {
+function drawBall(sound) {
     if (gameStatus) {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -157,8 +153,11 @@ function drawBall() {
         if ((ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY - ballR <= hazardHeight)
             || (ballX + ballR >= hazardX && ballX - ballR <= hazardX + hazardWidth && ballY + ballR >= canvas.height - hazardHeight)) {
             gameStatus = false;
-            hazard.currentTime = 0.07;
-            hazard.play();
+            if (sound) {
+                var hazard = new Audio("Sounds/hazard.mp3");
+                hazard.currentTime = 0.07;
+                hazard.play();
+            }
         }
     } else {
         drawGameOver();
@@ -208,7 +207,7 @@ function drawHazard() {
     }
 }
 
-function drawCoin() {
+function drawCoin(sound) {
     if (gameStatus) {
         if (animationCoin) {
             window.cancelAnimationFrame(animationCoin);
@@ -216,8 +215,11 @@ function drawCoin() {
     
         if (!coinStatus) {
             if (coinX <= ballX + ballR && coinX >= ballX - ballR && coinY <= ballY + ballR && coinY >= ballY - ballR) {
-                coin.currentTime = 0.1;
-                coin.play();
+                if (sound) {
+                    var coin = new Audio("Sounds/coin.mp3");
+                    coin.currentTime = 0.1;
+                    coin.play();
+                }
                 coinCount++;
                 coinStatus = true;
                 context.beginPath();
@@ -261,7 +263,7 @@ function drawCoin() {
     }
 }
 
-function drawRage() {
+function drawRage(sound) {
     if (gameStatus) {
         if (animationRage) {
             window.cancelAnimationFrame(animationRage);
@@ -269,8 +271,11 @@ function drawRage() {
     
         if (!rageStatus) {
             if (rageX <= ballX + ballR && rageX >= ballX - ballR && rageY <= ballY + ballR && rageY >= ballY - ballR) {
-                sizeEffect.currentTime = 0.1;
-                sizeEffect.play();
+                if (sound) {
+                    var rage = new Audio("Sounds/sizeEffect.mp3");
+                    rage.currentTime = 0.1;
+                    rage.play();
+                }
                 rageCount++;
                 rageStatus = true;
                 context.beginPath();
@@ -314,7 +319,7 @@ function drawRage() {
     }
 }
 
-function drawExiler() {
+function drawExiler(sound) {
     if (gameStatus) {
         if (animationExiler) {
             window.cancelAnimationFrame(animationExiler);
@@ -322,8 +327,11 @@ function drawExiler() {
     
         if (!exilerStatus) {
             if (exilerX <= ballX + ballR && exilerX >= ballX - ballR && exilerY <= ballY + ballR && exilerY >= ballY - ballR) {
-                sizeEffect.currentTime = 0.1;
-                sizeEffect.play();
+                if (sound) {
+                    var exiler = new Audio("Sounds/sizeEffect.mp3");
+                    exiler.currentTime = 0.1;
+                    exiler.play();
+                }
                 exilerCount++;
                 exilerStatus = true;
                 context.beginPath();
