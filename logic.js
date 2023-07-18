@@ -39,7 +39,7 @@ var canvas, context;
 var startTime, timePassed;
 var animationHazard, animationCoin, animationRage, animationExiler;
 
-const jump = new Audio("Sounds/jump.mp3");
+var jump = new Audio("Sounds/jump.mp3");
 
 window.onload = function() {
     document.onkeydown = function() {
