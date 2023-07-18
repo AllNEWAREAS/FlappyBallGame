@@ -14,26 +14,26 @@ const COIN_MIN = 600;
 const COUNT_X = 10;
 const COUNT_Y = 30;
 
-var exilerX = 800;
-var exilerY = 150;
-var rageX = 700;
-var rageY = 250;
+var speed = DEFAULT_SPEED;
 var coinX = 650;
 var coinY = 200;
-var hazardWidth = 70;
-var hazardHeight = 100;
-var speed = DEFAULT_SPEED;
+var rageX = 700;
+var rageY = 250;
+var exilerX = 800;
+var exilerY = 150;
 var ballX = 300;
 var ballY = 385;
 var ballR = 15;
+var hazardWidth = 70;
+var hazardHeight = 100;
 var hazardX = 600;
 var hazardY = 0;
-var coinStatus = false;
-var rageStatus = false;
-var exilerStatus = false;
 var exilerCount = 0;
 var rageCount = 0;
 var coinCount = 0;
+var coinStatus = false;
+var rageStatus = false;
+var exilerStatus = false;
 var gameStatus = true;
 var canvas, context;
 var startTime, timePassed;
@@ -42,6 +42,7 @@ var animationHazard, animationCoin, animationRage, animationExiler;
 window.onload = function() {
     document.onkeydown = function() {
         const jump = new Audio("Sounds/jump.mp3");
+
         if (gameStatus) {
             jump.play();
             startTime = Date.now();
@@ -79,6 +80,7 @@ window.onload = function() {
 
     document.ontouchstart = function() {
         const jump = new Audio("Sounds/jump.mp3");
+        
         if (gameStatus) {
             jump.play();
             startTime = Date.now();
@@ -142,7 +144,7 @@ function drawBall() {
     
         if (ballY <= MAX_BALL_Y) {
             speed += (SPEED_FACTOR * timePassed);
-            ballY += speed*timePassed;
+            ballY += speed * timePassed;
         } else {
             context.beginPath();
             context.font = "25px Arial";
