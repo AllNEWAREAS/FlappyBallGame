@@ -41,8 +41,8 @@ var animationHazard, animationCoin, animationRage, animationExiler;
 
 window.onload = function() {
     document.onkeydown = function() {
+        var jump = new Audio("Sounds/jump.mp3");
         if (gameStatus) {
-            var jump = new Audio("Sounds/jump.mp3");
             jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
@@ -78,8 +78,8 @@ window.onload = function() {
     }
 
     document.ontouchstart = function() {
+        var jump = new Audio("Sounds/jump.mp3");
         if (gameStatus) {
-            var jump = new Audio("Sounds/jump.mp3");
             jump.play();
             startTime = Date.now();
             speed = DEFAULT_SPEED;
